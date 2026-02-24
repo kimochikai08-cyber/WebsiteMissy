@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syimpri Birthdi Girl Sayo to</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            touch-action: manipulation;
+             background: linear-gradient(135deg, #9D50BB, #ffffff);
+        }
+
+        #app {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .step {
+            position: absolute;
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.509);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .step.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #9D50BB, #b82780);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #9D50BB, #9D50BB, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .heart-beat {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.1);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+
+            75% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .emoji {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .reason-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .reason-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        #progress-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 400px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            z-index: 100;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #9D50BB, #b289ff);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+      <audio id="lullaby" loop>
+        <source src="j's lullaby.mp3">
+      </audio>
+    <div id="app">
+        <div id="canvas-container"></div>
+
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div id="content">
+            <!-- Step 1 -->
+            <div class="step active" id="step1">
+                <div class="emoji heart-beat">💚</div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gradient">Hey Missy :D</h1>
+                <p class="text-xl text-gray-700 mb-8">Adressing the hippo in the room, "You" JAJJAJ your birthday to be exact. Again HAPPY BIRTHDAYY!!. First off sorry as this was all i could muster up in a month :< </p>
+                <button class="btn" id="start-btn">Naiinip nako mha</button>
+            </div>
+
+            <!-- Step 2: -->
+            <div class="step" id="step2">
+                <div class="emoji">🌻</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gradient">Happy Birthday!</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Starting off, you mentioned before na birthday's to you are sacred and special diba? Well to me it was not. Not anyones birthday, especially mine. To me kasi i see it pointless as it is nothing but an expensive, tiring casual day. So im beyond suprise at myself kasi this is the first yknow, that ive made efforts to bother let alone even make a birthday gift for someone at least not anyone online. WKWKWK WAITT i dont want to sadden this very special day of yours so ill try and word this in a flash. Anyways idk how you see or perceive yourself, pero say ko lang, always remember you're special <b>Nica</b> i'll even dare say na second to none. (kaw banaman +5 yung chromo e HAHAAH KIDDINGG) Kidding aside im fully aware na im but a mere stranger online, im not much pero if there are times ya think you dont have anyone that will be on your side ever–I MUSTVE MEET MY FATE BROUGHT DOWN BY THE PILLARS THAT HOLDS THE HEAVEN HUHUU :C. 
+                </p>
+                <button class="btn" id="next-btn-2">Curious what makes u special hm?</button>
+            </div>
+
+            <!-- Step 3: -->
+            <div class="step" id="step3">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gradient">What a very good question missy!</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="reason-card">
+                        <div class="emoji text-3xl">🧙‍♂️</div>
+                        <h3 class="text-xl font-bold mb-2 text-pink-600">You & your Yappings</h3>
+                        <p class="text-gray-700">First off. I admire your courage for saying 💩 especially to a stranger like me online, your past and all. Since IM SURE you know na im the worst with words sorry huhu pero im trying my best😥. But if ever you need ears to listen to wtv may it be insignificant or worthless, well at least to you—Its the opposite for me.   
+                        </p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="emoji text-3xl">✿🦢✿</div>
+                        <h3 class="text-xl font-bold mb-2 text-pink-600"> <b>YOU</b> </h3>
+                        <p class="text-gray-700">Writing this i have no idea how i'll begin. Doomed myself😭, Kasi not only are you The smartest, Most Talented, Gifted, Sincere, Kindest, Caring, Social, Easygoing, Agreeable, Curious, Creative, Generous, Magnanimous, Fearless, Humorous, Empathetic, Energetic, Faithful, Driven, Goofy, Odd, Corny at times, Reliable, Absurd, Silly, Wacky, Whimsical, Loose screws, Tenacious, Lazy, aswell as Moody, Reckless and all. But because you are <b>"You"</b> in short—words alone can't and will never define you missy.
+                        </p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="emoji text-3xl">🌹</div>
+                        <h3 class="text-xl font-bold mb-2 text-pink-600">Your Presence</h3>
+                        <p class="text-gray-700">I can't picture the things youve been through and what exactly widen your perspective about things. Especially about the way you see or treat yourself. Pero know that your presence means the world to someone. Lastly i hope na my small irrelevant presence makes you even the bit comfortable :<   
+                        </p>
+                    </div>
+                </div>
+                <button class="btn" id="next-btn-3">Yappington Meron pa😁😙</button>
+            </div>
+
+            <!-- Step 4: -->
+           <<div class="step" id="step4">
+                <div class="emoji">🖼️</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gradient">Reminiscing</h2>
+            <div class="bg-gradient-to-r from-pink-200 to-rose-200 rounded-xl p-8 mb-8 w-full max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
+            <img src="meh.png" height="500" width="500" alt="Memory 1" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+            <img src="crush.png" height="500" width="500" alt="Memory 2" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+            <img src="mha.png" height="300" width="500" alt="Memory 3" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
+            </div>
+            <p class="text-lg text-gray-700 italic text-center mt-4">
+            <b>Peak dontcha think?😹</b>
+            </p>
+                </div>
+                <p class="text-lg text-gray-700 mb-6">
+                    Every moment with you is as clear as day to me. Every second that we lose our braincells, laughing at the most random things-i hope these words reach you and remind you JUST HOW SIGNIFICANT your <b>Presence</b> alone is.
+                </p>
+         <p class="text-lg text-gray-700 italic mt-2">
+                </p>
+                <button class="btn" id="next-btn-4">LAST NA PRAMIS</button>
+            </div>
+
+            <!-- Step 5: -->
+            <div class="step" id="step5">
+                <div class="emoji">🌑💮</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gradient">Birthday Message (My Yap) </h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    Now you must be wondering why i stayed, did all sort of things for you. I know i know a stranger online you mustve thought at times if i have a motive or hidden agenda smth. But the small talk we had—your words it reached me and that was is all i need. Lastly a birthday wish for you hmm, HAHAHAHHA im sure you're cringing so bad na so ill end this as usual, HAPPY BIRTHDAYY AGAIN MISSYYY HAVE A BLAST AND MAY ALL YOUR WISHES COME TRUE. JUST GET HOME SAFELYY😸.
+                </p>
+                <p class="text-xl font-semibold text-purple-600 mb-8">
+                    And if you're wondering what you can do to pay me back AJAJAJAJ you shouldnt bother you already did more than enough for me. Just be <b>You</b>. Happy Birthday Nica.
+                </p>
+                <button class="btn" id="confetti-btn">YAYYYY!! BERDI GIRL</button>
+                <p class="mt-8 text-gray-500">Yours Truly, GOAT <b>-Kai</b>🐨</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js Heart Background
+        const container = document.getElementById('canvas-container');
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
+
+        // Improved Heart Geometry
+        const x = 0, y = 0;
+        const heartShape = new THREE.Shape();
+        heartShape.moveTo(x + 0.5, y + 0.5);
+        heartShape.bezierCurveTo(x + 0.5, y + 0.5, x + 1, y, x, y);
+        heartShape.bezierCurveTo(x - 1, y, x - 1, y + 1.5, x - 1, y + 1.5);
+        heartShape.bezierCurveTo(x - 1, y + 2.5, x + 0.5, y + 3.5, x + 0.5, y + 3.5);
+        heartShape.bezierCurveTo(x + 0.5, y + 3.5, x + 2, y + 2.5, x + 2, y + 1.5);
+        heartShape.bezierCurveTo(x + 2, y + 1.5, x + 2, y, x + 1, y);
+        heartShape.bezierCurveTo(x + 0.5, y, x + 0.5, y + 0.5, x + 0.5, y + 0.5);
+
+        const extrudeSettings = {
+            depth: 0.5,
+            bevelEnabled: true,
+            bevelSegments: 3,
+            bevelSize: 0.2,
+            bevelThickness: 0.3
+        };
+
+        const heartGeometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+
+        // Create multiple hearts with different colors and properties
+        const hearts = [];
+        const colors = [
+            0x7c09aa, 0x7c09aa, 0x7c09aa, 0x7c09aa,
+            0x31920a, 0x31920a, 0x31920a, 0x31920a
+        ];
+
+        for (let i = 0; i < 25; i++) {
+            const material = new THREE.MeshPhongMaterial({
+                color: colors[Math.floor(Math.random() * colors.length)],
+                emissive: 0xff0000,
+                emissiveIntensity: 0.1,
+                shininess: 100,
+                transparent: true,
+                opacity: 0.9
+            });
+
+            const heart = new THREE.Mesh(heartGeometry, material);
+
+            // Random position and scale
+            heart.position.x = (Math.random() - 0.5) * 50;
+            heart.position.y = (Math.random() - 0.5) * 50;
+            heart.position.z = (Math.random() - 0.5) * 50;
+
+            const scale = Math.random() * 0.8 + 0.5;
+            heart.scale.set(scale, scale, scale);
+
+            // Random rotation
+            heart.rotation.x = Math.random() * Math.PI;
+            heart.rotation.y = Math.random() * Math.PI;
+
+            // Store animation properties
+            heart.userData = {
+                speedX: Math.random() * 0.02 - 0.01,
+                speedY: Math.random() * 0.02 - 0.01,
+                speedZ: Math.random() * 0.02 - 0.01,
+                rotationSpeedX: Math.random() * 0.01,
+                rotationSpeedY: Math.random() * 0.01,
+                originalX: heart.position.x,
+                originalY: heart.position.y,
+                originalZ: heart.position.z,
+                floatDistance: 2 + Math.random() * 3
+            };
+
+            scene.add(heart);
+            hearts.push(heart);
+        }
+
+        // Add lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Animate hearts
+            hearts.forEach(heart => {
+                // Floating animation
+                const time = Date.now() * 0.001;
+                heart.position.x = heart.userData.originalX + Math.sin(time * heart.userData.speedX * 10) * heart.userData.floatDistance;
+                heart.position.y = heart.userData.originalY + Math.sin(time * heart.userData.speedY * 10) * heart.userData.floatDistance;
+                heart.position.z = heart.userData.originalZ + Math.sin(time * heart.userData.speedZ * 10) * heart.userData.floatDistance;
+
+                // Rotation
+                heart.rotation.x += heart.userData.rotationSpeedX;
+                heart.rotation.y += heart.userData.rotationSpeedY;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Step Navigation
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function updateProgressBar() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function showStep(stepNumber) {
+
+            // Hide all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Show current step
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+
+            // Update progress bar
+            updateProgressBar();
+
+            // Special effect for last step
+            if (stepNumber === totalSteps) {
+                document.getElementById('confetti-btn').classList.add('animate-pulse');
+            }
+        }
+        
+        // Button event listeners
+        document.getElementById('start-btn').addEventListener('click', () => {
+            currentStep = 2;
+            showStep(currentStep);
+        });
+
+        document.getElementById('next-btn-2').addEventListener('click', () => {
+            currentStep = 3;
+            showStep(currentStep);
+        });
+
+        document.getElementById('next-btn-3').addEventListener('click', () => {
+            currentStep = 4;
+            showStep(currentStep);
+        });
+
+        document.getElementById('next-btn-4').addEventListener('click', () => {
+            currentStep = 5;
+            showStep(currentStep);
+        });
+
+            let musicStarted = false;
+
+              window.addEventListener('click', function() {
+             if (!musicStarted) {
+             const audio = document.getElementById("lullaby");
+             audio.currentTime = 0;
+             audio.play();    
+             musicStarted = true;
+             }      
+            });
+
+        // Confetti button
+        document.getElementById('confetti-btn').addEventListener('click', () => {
+            // Standard confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#ff69b4', '#ff1493', '#ffc0cb']
+            });
+
+            // Heart-shaped confetti
+            setTimeout(() => {
+                confetti({
+                    particleCount: 30,
+                    spread: 60,
+                    origin: { y: 0.5 },
+                    shapes: ['heart'],
+                    colors: ['#ff0000', '#ff69b4']
+                });
+            }, 300);
+
+            // More hearts from different directions
+            setTimeout(() => {
+                confetti({
+                    particleCount: 20,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    shapes: ['heart'],
+                    colors: ['#ff0000', '#ff69b4']
+                });
+
+                confetti({
+                    particleCount: 20,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    shapes: ['heart'],
+                    colors: ['#ff0000', '#ff69b4']
+                });
+            }, 600);
+
+            // Make hearts float up from the background
+            hearts.forEach(heart => {
+                gsap.to(heart.position, {
+                    y: heart.position.y - 30,
+                    duration: 3,
+                    ease: "power1.out"
+                });
+
+                gsap.to(heart.material, {
+                    opacity: 0,
+                    duration: 3,
+                    ease: "power1.out"
+                });
+            });
+        });
+
+        // Initialize progress bar
+        updateProgressBar();
+    </script>
+</body>
+</html>
